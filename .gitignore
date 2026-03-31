@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+dist/
+build/
+
+# Archivos de entorno
+.env
+.env.local
+.env.production
+
+# Caché
+.vite/
+.next/
+prisma/migrations/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Prisma
+prisma/*.db
