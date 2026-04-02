@@ -8,7 +8,7 @@ const Home = () => {
         <div>
             <Hero />
 
-            {/* Servicios */}
+            {/* Sección de Servicios */}
             <div className="py-24 bg-gray-50">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-16">
@@ -105,12 +105,14 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* NUEVA SECCIÓN: ¿Por qué elegir LEXIURIDICUS? */}
+            {/* Nueva Sección: ¿Por qué elegir LEXIURIDICUS? */}
             <div className="py-24 bg-white">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 className="text-5xl font-serif text-[#0A2540] mb-4">¿Por qué elegir LEXIURIDICUS?</h2>
-                        <p className="text-xl text-gray-600 max-w-xl mx-auto">Experiencia, rigor y enfoque estratégico que marcan la diferencia</p>
+                        <p className="text-xl text-gray-600 max-w-xl mx-auto">
+                            Experiencia, rigor y enfoque estratégico que marcan la diferencia
+                        </p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-10">
@@ -136,7 +138,7 @@ const Home = () => {
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.1 }}
-                                className="text-center bg-gray-50 rounded-3xl p-12 hover:bg-white hover:shadow-xl transition-all"
+                                className="text-center bg-gray-50 rounded-3xl p-12 hover:bg-white hover:shadow-xl transition-all border border-gray-100"
                             >
                                 <div className="text-6xl mb-8">{item.icon}</div>
                                 <h3 className="text-2xl font-semibold text-[#0A2540] mb-5">{item.title}</h3>

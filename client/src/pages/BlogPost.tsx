@@ -78,6 +78,7 @@ const BlogPost: React.FC = () => {
                 text: '✅ Comentario enviado correctamente. Será revisado antes de publicarse.'
             });
 
+            // Recargar el post para actualizar comentarios
             const refreshed = await axios.get(`http://localhost:5000/api/blog/${slug}`);
             setPost(refreshed.data);
 
@@ -93,7 +94,7 @@ const BlogPost: React.FC = () => {
         }
     };
 
-    // Infografía dinámica según el artículo
+    // === INFROGRAFÍA DINÁMICA (RESPECTANDO TU LÓGICA) ===
     const getKeyPoints = (slug: string) => {
         switch (slug) {
             case "imagen-corporativa-reputacion-legal":
@@ -131,6 +132,7 @@ const BlogPost: React.FC = () => {
     };
 
     if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-xl">Cargando artículo...</div>;
+
     if (error || !post) {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center px-6">
@@ -140,12 +142,18 @@ const BlogPost: React.FC = () => {
         );
     }
 
+    const paragraphs = post.content ? post.content.split('\n\n') : [];
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero */}
             <div className="relative h-[520px] overflow-hidden">
                 {post.image && (
-                    <img src={post.image} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <img
+                        src={post.image}
+                        alt={post.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80" />
 
@@ -164,17 +172,13 @@ const BlogPost: React.FC = () => {
 
             {/* Contenido del artículo */}
             <div className="max-w-4xl mx-auto px-6 py-16 prose prose-lg text-gray-700">
-                {post.content ? (
-                    post.content.split('\n\n').map((paragraph, i) => (
-                        <p key={i} className="mb-6">{paragraph}</p>
-                    ))
-                ) : (
-                    <p>No hay contenido disponible para este artículo.</p>
-                )}
+                {paragraphs.map((paragraph, i) => (
+                    <p key={i} className="mb-8">{paragraph}</p>
+                ))}
             </div>
 
-            {/* INFROGRAFÍA DINÁMICA */}
-            <div className="max-w-4xl mx-auto px-6 pb-16">
+            {/* INFROGRAFÍA DINÁMICA - RESPETANDO TU FUNCIÓN */}
+            <div className="max-w-4xl mx-auto px-6 pb-20">
                 <div className="bg-white rounded-3xl shadow-sm p-12 md:p-16 border border-gray-100">
                     <h3 className="text-4xl font-serif text-[#0A2540] mb-12 text-center">Puntos Clave del Artículo</h3>
 
@@ -197,9 +201,11 @@ const BlogPost: React.FC = () => {
             {/* Comentarios */}
             <div className="max-w-4xl mx-auto px-6 pb-20">
                 <div className="border-t border-gray-200 pt-16">
-                    <h2 className="text-4xl font-serif text-[#0A2540] mb-10">Comentarios ({post.comments?.length || 0})</h2>
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-10">
+                        Comentarios ({post.comments?.length || 0})
+                    </h2>
 
-                    {/* Formulario */}
+                    {/* Formulario de comentarios */}
                     <motion.form
                         onSubmit={handleSubmitComment}
                         className="bg-white p-10 md:p-14 rounded-3xl shadow-sm mb-16"
@@ -266,38 +272,35 @@ const BlogPost: React.FC = () => {
                     {/* Lista de comentarios */}
                     <div className="space-y-10">
                         {post.comments && post.comments.length > 0 ? (
-                            post.comments.map((comment) => (
-                                <motion.div
-                                    key={comment.id}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="bg-white p-8 rounded-3xl shadow-sm"
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <p className="font-semibold text-lg">{comment.author}</p>
-                                            <p className="text-sm text-gray-500">
-                                                {new Date(comment.createdAt).toLocaleDateString('es-CO', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
-                                            </p>
+                            post.comments
+                                .filter(comment => comment.approved)
+                                .map((comment) => (
+                                    <motion.div
+                                        key={comment.id}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="bg-white p-8 rounded-3xl shadow-sm"
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <p className="font-semibold text-lg">{comment.author}</p>
+                                                <p className="text-sm text-gray-500">
+                                                    {new Date(comment.createdAt).toLocaleDateString('es-CO', {
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    })}
+                                                </p>
+                                            </div>
                                         </div>
-                                        {!comment.approved && (
-                                            <span className="px-4 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full font-medium">
-                                                Pendiente
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="mt-6 text-gray-700 leading-relaxed text-[17px]">{comment.content}</p>
-                                </motion.div>
-                            ))
+                                        <p className="mt-6 text-gray-700 leading-relaxed text-[17px]">{comment.content}</p>
+                                    </motion.div>
+                                ))
                         ) : (
                             <p className="text-center text-gray-500 py-16 text-lg">
-                                Aún no hay comentarios. ¡Sé el primero en compartir tu opinión!
+                                Aún no hay comentarios aprobados. ¡Sé el primero en compartir tu opinión!
                             </p>
                         )}
                     </div>

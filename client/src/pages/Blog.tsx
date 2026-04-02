@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 interface Post {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   excerpt: string;
@@ -17,24 +17,40 @@ interface Post {
 const Blog = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/blog')
-      .then((response) => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/blog');
         setPosts(response.data);
-      })
-      .catch((error) => {
-        console.error("Error al cargar posts:", error);
-      })
-      .finally(() => setLoading(false));
+      } catch (err) {
+        console.error('Error al cargar posts:', err);
+        setError('No se pudieron cargar los artículos. Inténtalo más tarde.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl text-gray-600">Cargando artículos del blog...</p>
+          <div className="w-12 h-12 border-4 border-[#0A2540] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando artículos del blog...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600">{error}</p>
         </div>
       </div>
     );
@@ -42,81 +58,71 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-20">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-6xl font-serif font-bold text-primary mb-6 tracking-tight">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-serif font-bold text-[#0A2540] mb-6">
             Blog LEXIURIDICUS
           </h1>
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
             Artículos especializados en derecho corporativo, gobierno societario y asesoría estratégica para empresas.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Grid de Posts Mejorado */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {posts.map((post, index) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.08 }}
-              className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300"
             >
-              {/* Imagen con overlay elegante */}
               {post.image && (
-                <div className="relative h-72 overflow-hidden">
-                  <img 
-                    src={post.image} 
+                <div className="h-56 overflow-hidden">
+                  <img
+                    src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  {/* Overlay oscuro suave */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  
-                  {/* Categoría */}
-                  <div className="absolute top-6 left-6">
-                    <span className="px-5 py-2 bg-white/95 backdrop-blur-md text-primary text-xs font-semibold rounded-2xl shadow-sm">
-                      {post.category}
-                    </span>
-                  </div>
-
-                  {/* Fecha */}
-                  <div className="absolute bottom-6 right-6 text-white text-sm font-medium bg-black/50 px-4 py-1 rounded-xl backdrop-blur-md">
-                    {new Date(post.createdAt).toLocaleDateString('es-CO', { 
-                      day: 'numeric', 
-                      month: 'short', 
-                      year: 'numeric' 
-                    })}
-                  </div>
                 </div>
               )}
 
-              {/* Contenido */}
-              <div className="p-8 flex flex-col flex-1">
-                <h2 className="text-2xl font-semibold leading-tight mb-5 text-gray-900 group-hover:text-primary transition-colors line-clamp-3">
-                  {post.title}
-                </h2>
+              <div className="p-8">
+                <div className="flex items-center gap-3 text-xs text-gray-500 mb-4">
+                  <span>{post.category}</span>
+                  <span>•</span>
+                  <span>{new Date(post.createdAt).toLocaleDateString('es-CO', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}</span>
+                </div>
 
-                <p className="text-gray-600 line-clamp-4 mb-8 flex-1 leading-relaxed">
+                <h3 className="text-2xl font-semibold leading-tight mb-4 text-[#0A2540] group-hover:text-amber-600 transition-colors line-clamp-3">
+                  {post.title}
+                </h3>
+
+                <p className="text-gray-600 line-clamp-4 mb-8">
                   {post.excerpt}
                 </p>
 
-                <Link 
+                <Link
                   to={`/blog/${post.slug}`}
-                  className="inline-flex items-center text-primary font-semibold group-hover:gap-3 transition-all mt-auto"
+                  className="inline-flex items-center text-[#0A2540] font-medium group-hover:gap-3 transition-all"
                 >
                   Leer artículo completo
-                  <span className="text-2xl transition-transform group-hover:translate-x-1">→</span>
+                  <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
                 </Link>
               </div>
             </motion.div>
           ))}
         </div>
+
+        {posts.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-gray-500 text-lg">No hay artículos publicados todavía.</p>
+          </div>
+        )}
       </div>
     </div>
   );
