@@ -5,118 +5,122 @@ import { Link } from 'react-router-dom';
 const GobiernoCorporativo = () => {
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Hero Section - Estilo premium */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white py-28 relative overflow-hidden"
-            >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff10_0%,transparent_70%)]" />
-
-                <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+            {/* Hero Section */}
+            <div className="bg-[#0A2540] text-white py-28">
+                <div className="max-w-5xl mx-auto px-6 text-center">
                     <motion.div
-                        initial={{ scale: 0.5, rotate: -10 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", stiffness: 120, damping: 12 }}
-                        className="text-8xl mb-8 inline-block"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-8xl mb-8"
                     >
-                        ⚖️
+                        🏛️
                     </motion.div>
-
-                    <h1 className="text-6xl font-serif font-bold mb-6 tracking-tight">
+                    <h1 className="text-6xl md:text-7xl font-serif font-bold tracking-tight mb-6">
                         Gobierno Corporativo
                     </h1>
-                    <p className="text-2xl text-emerald-100 max-w-3xl mx-auto">
-                        Estatutos sociales, juntas de accionistas, cumplimiento normativo y gobernanza corporativa de alto nivel.
+                    <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
+                        Estatutos sociales, juntas directivas y cumplimiento normativo para empresas sólidas y bien gobernadas
                     </p>
                 </div>
-            </motion.div>
+            </div>
 
             <div className="max-w-5xl mx-auto px-6 py-20">
-                <div className="grid md:grid-cols-12 gap-16">
-                    {/* Columna izquierda - Contenido principal */}
-                    <div className="md:col-span-7">
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="text-4xl font-semibold text-primary mb-10"
-                        >
-                            ¿Qué incluye este servicio?
-                        </motion.h2>
+                {/* Introducción */}
+                <div className="prose prose-lg max-w-none mb-20 text-center">
+                    <p className="text-xl text-gray-700 leading-relaxed">
+                        En un entorno regulatorio cada vez más exigente, contar con un sólido gobierno corporativo
+                        no es opcional: es una necesidad estratégica que protege a la empresa, sus socios y directivos.
+                    </p>
+                </div>
 
-                        <div className="space-y-10">
-                            {[
-                                "Elaboración, revisión y reforma de estatutos sociales",
-                                "Convocatoria, desarrollo y actas de juntas de accionistas",
-                                "Cumplimiento integral del Código de Comercio y normatividad vigente",
-                                "Secretaría técnica permanente de juntas y asambleas",
-                                "Diseño e implementación de protocolos de gobierno corporativo",
-                                "Asesoría en responsabilidad de administradores y representantes legales",
-                                "Implementación de buenas prácticas de gobernanza",
-                                "Cumplimiento de obligaciones societarias anuales"
-                            ].map((item, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: -40 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.08 }}
-                                    className="flex gap-5"
-                                >
-                                    <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                                        ✓
-                                    </div>
-                                    <p className="text-lg text-gray-700 leading-relaxed">{item}</p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
+                {/* Servicios Incluidos */}
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    className="mb-20"
+                >
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-12 text-center">
+                        Servicios que ofrecemos
+                    </h2>
 
-                    {/* Columna derecha - Proceso */}
-                    <div className="md:col-span-5">
-                        <div className="sticky top-8">
-                            <motion.h2
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="text-4xl font-semibold text-primary mb-10"
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {[
+                            "Elaboración, revisión y actualización de estatutos sociales",
+                            "Convocatoria, preparación y actas de juntas de socios y asambleas",
+                            "Diseño e implementación de manuales de gobierno corporativo",
+                            "Asesoría en estructura de órganos de administración y control",
+                            "Cumplimiento normativo (Superintendencia de Sociedades, Cámara de Comercio, etc.)",
+                            "Protocolos de conflictos de interés y responsabilidad de administradores",
+                            "Secretaría técnica de juntas y comités",
+                            "Diagnóstico y mejora continua del gobierno corporativo"
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -30 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.06 }}
+                                className="flex items-start gap-5 bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow"
                             >
-                                Nuestro Proceso
-                            </motion.h2>
-
-                            <div className="space-y-10">
-                                {[
-                                    "Diagnóstico del estado actual de gobierno corporativo y cumplimiento",
-                                    "Elaboración o reforma integral de estatutos sociales",
-                                    "Organización, formalización y actas de juntas y asambleas",
-                                    "Implementación de protocolos de gobernanza y cumplimiento",
-                                    "Asesoría continua y secretaría técnica permanente"
-                                ].map((step, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0 }}
-                                        whileInView={{ opacity: 1 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="flex gap-6"
-                                    >
-                                        <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl flex-shrink-0">
-                                            {i + 1}
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-lg text-gray-800">{step}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-
-                            <div className="mt-16">
-                                <Link
-                                    to="/contacto"
-                                    className="inline-flex items-center justify-center w-full bg-primary hover:bg-primary/90 text-white py-4 px-10 rounded-2xl font-semibold text-lg transition-all"
-                                >
-                                    Solicitar este servicio →
-                                </Link>
-                            </div>
-                        </div>
+                                <span className="text-3xl text-emerald-500 mt-1 flex-shrink-0">✓</span>
+                                <span className="text-lg text-gray-700">{item}</span>
+                            </motion.div>
+                        ))}
                     </div>
+                </motion.div>
+
+                {/* Beneficios Clave */}
+                <div className="bg-white rounded-3xl p-12 md:p-16 mb-20 shadow-xl">
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-12 text-center">
+                        Beneficios de un buen Gobierno Corporativo
+                    </h2>
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {[
+                            {
+                                icon: "🛡️",
+                                title: "Protección Legal",
+                                desc: "Reduce riesgos de sanciones y responsabilidad de administradores"
+                            },
+                            {
+                                icon: "📈",
+                                title: "Atracción de Inversión",
+                                desc: "Mejora la confianza de inversionistas y socios estratégicos"
+                            },
+                            {
+                                icon: "🔄",
+                                title: "Eficiencia Operativa",
+                                desc: "Decisiones más ágiles y procesos internos más claros"
+                            }
+                        ].map((benefit, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="text-center"
+                            >
+                                <div className="text-6xl mb-6">{benefit.icon}</div>
+                                <h3 className="font-semibold text-2xl mb-4 text-[#0A2540]">{benefit.title}</h3>
+                                <p className="text-gray-600">{benefit.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* CTA Final */}
+                <div className="text-center bg-gradient-to-br from-[#0A2540] to-blue-950 text-white rounded-3xl p-16">
+                    <h3 className="text-4xl font-serif mb-6">
+                        ¿Tus estatutos sociales están actualizados?
+                    </h3>
+                    <p className="text-xl mb-10 max-w-2xl mx-auto opacity-90">
+                        Muchas empresas enfrentan problemas graves por tener documentos desactualizados.
+                        Realicemos un diagnóstico sin costo.
+                    </p>
+                    <Link
+                        to="/contacto"
+                        className="inline-block bg-white text-[#0A2540] hover:bg-gray-100 font-semibold px-16 py-6 rounded-2xl text-xl transition-all"
+                    >
+                        Solicitar diagnóstico de Gobierno Corporativo →
+                    </Link>
                 </div>
             </div>
         </div>

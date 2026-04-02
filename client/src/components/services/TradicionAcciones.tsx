@@ -5,119 +5,99 @@ import { Link } from 'react-router-dom';
 const TradicionAcciones = () => {
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Hero Section - Estilo premium */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 text-white py-28 relative overflow-hidden"
-            >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#ffffff10_0%,transparent_70%)]" />
-
-                <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+            {/* Hero Section */}
+            <div className="bg-[#0A2540] text-white py-28">
+                <div className="max-w-5xl mx-auto px-6 text-center">
                     <motion.div
-                        initial={{ scale: 0.5, rotate: -15 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", stiffness: 120, damping: 12 }}
-                        className="text-8xl mb-8 inline-block"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-8xl mb-8"
                     >
-                        📋
+                        📜
                     </motion.div>
-
-                    <h1 className="text-6xl font-serif font-bold mb-6 tracking-tight">
+                    <h1 className="text-6xl md:text-7xl font-serif font-bold tracking-tight mb-6">
                         Tradición de Acciones
                     </h1>
-                    <p className="text-2xl text-blue-100 max-w-3xl mx-auto">
-                        Cesión, transferencia y formalización legal de acciones con total seguridad jurídica,
-                        transparencia y cumplimiento registral.
+                    <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
+                        Cesión, transferencia y formalización legal de acciones con máxima seguridad jurídica
                     </p>
                 </div>
-            </motion.div>
+            </div>
 
             <div className="max-w-5xl mx-auto px-6 py-20">
-                <div className="grid md:grid-cols-12 gap-16">
-                    {/* Columna izquierda - Contenido principal */}
-                    <div className="md:col-span-7">
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            className="text-4xl font-semibold text-primary mb-10"
-                        >
-                            ¿Qué incluye nuestro servicio?
-                        </motion.h2>
+                {/* Introducción */}
+                <div className="prose prose-lg max-w-none mb-20">
+                    <p className="text-xl text-gray-700 leading-relaxed">
+                        La tradición de acciones es uno de los procedimientos societarios más importantes y frecuentes en el derecho corporativo colombiano.
+                        Una cesión mal estructurada puede generar graves consecuencias fiscales, societarias y patrimoniales.
+                    </p>
+                </div>
 
-                        <div className="space-y-10">
-                            {[
-                                "Cesión y transferencia de acciones entre socios o terceros",
-                                "Elaboración y revisión de contratos de cesión",
-                                "Formalización notarial de la operación",
-                                "Inscripción en el Registro Mercantil y actualización de libros",
-                                "Due diligence completo de los títulos valores",
-                                "Resolución de conflictos accionarios y disputas societarias",
-                                "Asesoría en valoración económica de las acciones",
-                                "Actualización del libro de socios y registro de accionistas"
-                            ].map((item, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, x: -40 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.08 }}
-                                    className="flex gap-5"
-                                >
-                                    <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                                        ✓
-                                    </div>
-                                    <p className="text-lg text-gray-700 leading-relaxed">{item}</p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
+                {/* Servicios Incluidos */}
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    className="mb-20"
+                >
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-12 text-center">¿Qué incluye nuestro servicio?</h2>
 
-                    {/* Columna derecha - Proceso */}
-                    <div className="md:col-span-5">
-                        <div className="sticky top-8">
-                            <motion.h2
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="text-4xl font-semibold text-primary mb-10"
+                    <div className="grid md:grid-cols-2 gap-8">
+                        {[
+                            "Análisis y revisión de títulos de acciones",
+                            "Elaboración de contratos de cesión y transferencia",
+                            "Formalización ante notario y registro mercantil",
+                            "Asesoría en aspectos tributarios de la operación",
+                            "Verificación de derechos de preferencia",
+                            "Actualización del libro de accionistas",
+                            "Gestión de protocolización y registro",
+                            "Asesoría en cesiones internacionales"
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                                className="flex items-start gap-4 bg-white p-8 rounded-3xl shadow-sm"
                             >
-                                Nuestro Proceso
-                            </motion.h2>
-
-                            <div className="space-y-10">
-                                {[
-                                    "Análisis detallado de la situación accionaria y documentación actual",
-                                    "Preparación de contratos, minutas y documentación legal requerida",
-                                    "Revisión y formalización ante notario público",
-                                    "Gestión de inscripción en el Registro Mercantil",
-                                    "Actualización final de libros societarios y entrega de títulos"
-                                ].map((step, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0 }}
-                                        whileInView={{ opacity: 1 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="flex gap-6"
-                                    >
-                                        <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl flex-shrink-0">
-                                            {i + 1}
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-lg text-gray-800">{step}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-
-                            <div className="mt-16">
-                                <Link
-                                    to="/contacto"
-                                    className="inline-flex items-center justify-center w-full bg-primary hover:bg-primary/90 text-white py-4 px-10 rounded-2xl font-semibold text-lg transition-all"
-                                >
-                                    Solicitar este servicio →
-                                </Link>
-                            </div>
-                        </div>
+                                <span className="text-2xl text-emerald-500 mt-1">✓</span>
+                                <span className="text-lg text-gray-700">{item}</span>
+                            </motion.div>
+                        ))}
                     </div>
+                </motion.div>
+
+                {/* Beneficios */}
+                <div className="bg-white rounded-3xl p-12 md:p-16 mb-20 shadow-xl">
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-10 text-center">¿Por qué trabajar con nosotros?</h2>
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {[
+                            { title: "Seguridad Total", desc: "Evitamos riesgos de nulidad o conflictos futuros" },
+                            { title: "Eficiencia", desc: "Procesos ágiles con plazos claros y controlados" },
+                            { title: "Experiencia", desc: "Más de 12 años asesorando operaciones societarias complejas" }
+                        ].map((benefit, i) => (
+                            <div key={i} className="text-center">
+                                <div className="text-5xl mb-4">🛡️</div>
+                                <h3 className="font-semibold text-xl mb-3">{benefit.title}</h3>
+                                <p className="text-gray-600">{benefit.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* CTA */}
+                <div className="text-center">
+                    <h3 className="text-3xl font-serif text-[#0A2540] mb-6">
+                        ¿Necesitas formalizar una cesión de acciones?
+                    </h3>
+                    <p className="text-xl text-gray-600 mb-10 max-w-xl mx-auto">
+                        Contáctanos hoy y recibe asesoría especializada en menos de 24 horas.
+                    </p>
+                    <Link
+                        to="/contacto"
+                        className="inline-block bg-[#0A2540] text-white px-14 py-5 rounded-2xl font-semibold text-lg hover:bg-[#0A2540]/90 transition-all"
+                    >
+                        Solicitar asesoría en Tradición de Acciones →
+                    </Link>
                 </div>
             </div>
         </div>
