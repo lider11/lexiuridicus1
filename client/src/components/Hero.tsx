@@ -99,14 +99,7 @@ const Hero = () => {
                 transition={{ duration: 2.5, repeat: Infinity }}
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/70"
             >
-                <span className="text-xs tracking-widest">DESPLÁZATE</span>
-                <div className="w-6 h-10 border-2 border-white/60 rounded-full mt-3 flex justify-center pt-2">
-                    <motion.div
-                        animate={{ y: [0, 12, 0] }}
-                        transition={{ duration: 1.8, repeat: Infinity }}
-                        className="w-1 h-2 bg-white/70 rounded-full"
-                    />
-                </div>
+
             </motion.div>
         </section>
     );

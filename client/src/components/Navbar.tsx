@@ -1,41 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
 
     const navLinks = [
         { name: 'Inicio', path: '/' },
-        { name: 'Servicios', path: '/servicios' },
         { name: 'Nosotros', path: '/nosotros' },
-        { name: 'Blog', path: '/blog' },           // ← Agregado
+        { name: 'Servicios', path: '/servicios' },
+        { name: 'Blog', path: '/blog' },
         { name: 'Contacto', path: '/contacto' },
     ];
 
     return (
-        <nav className="bg-[#0A2540] text-white sticky top-0 z-50">
+        <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex items-center justify-between h-20">
+
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center text-[#0A2540] font-bold text-2xl">
-                            L
-                        </div>
-                        <div>
-                            <div className="font-serif text-2xl font-bold tracking-tight">LEXIURIDICUS</div>
-                            <div className="text-[10px] text-gray-400 -mt-1">ABOGADOS CORPORATIVOS</div>
+                    <Link to="/" className="flex items-center gap-3 group">
+                        <div className="flex flex-col">
+                            <div className="font-serif text-3xl font-bold tracking-tight text-[#0A2540]">
+                                LEXIURIDICUS
+                            </div>
+                            <div className="text-[10px] text-gray-400 -mt-1 tracking-[2px] font-medium">
+                                ABOGADOS CORPORATIVOS
+                            </div>
                         </div>
                     </Link>
 
-                    {/* Menú Desktop */}
+                    {/* Menú de navegación */}
                     <div className="hidden md:flex items-center gap-10">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className={`font-medium transition-colors hover:text-[#D4AF37] ${location.pathname === link.path ? 'text-[#D4AF37]' : 'text-gray-300'
+                                className={`font-medium transition-colors hover:text-[#0A2540] ${location.pathname === link.path
+                                    ? 'text-[#0A2540] font-semibold'
+                                    : 'text-gray-600'
                                     }`}
                             >
                                 {link.name}
@@ -43,49 +46,22 @@ const Navbar = () => {
                         ))}
                     </div>
 
-                    {/* Botón CTA */}
-                    <div className="hidden md:block">
-                        <Link
-                            to="/contacto"
-                            className="bg-[#D4AF37] text-[#0A2540] px-6 py-3 rounded-full font-semibold hover:bg-[#D4AF37]/90 transition-all"
+                    {/* Botón Contacto */}
+                    <Link to="/contacto">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="bg-[#0A2540] text-white px-8 py-3 rounded-2xl font-semibold hover:bg-[#0A2540]/90 transition-all"
                         >
-                            Consulta de agenda
-                        </Link>
-                    </div>
+                            Contáctanos
+                        </motion.button>
+                    </Link>
 
-                    {/* Botón menú móvil */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden text-white"
-                    >
-                        {isOpen ? <X size={28} /> : <Menu size={28} />}
-                    </button>
+                    {/* Menú móvil (placeholder por ahora) */}
+                    <div className="md:hidden">
+                        <button className="text-2xl">☰</button>
+                    </div>
                 </div>
-
-                {/* Menú Móvil */}
-                {isOpen && (
-                    <div className="md:hidden py-6 border-t border-white/10">
-                        <div className="flex flex-col gap-6 text-lg">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    onClick={() => setIsOpen(false)}
-                                    className="hover:text-[#D4AF37] transition-colors"
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                            <Link
-                                to="/contacto"
-                                onClick={() => setIsOpen(false)}
-                                className="bg-[#D4AF37] text-[#0A2540] px-6 py-3 rounded-full font-semibold text-center mt-4"
-                            >
-                                Consulta de agenda
-                            </Link>
-                        </div>
-                    </div>
-                )}
             </div>
         </nav>
     );
