@@ -18,4 +18,17 @@ model Post {
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  comments  Comment[]
+
+  @@map("posts")
+}
+
+model Comment {
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
 }
