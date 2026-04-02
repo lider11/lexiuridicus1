@@ -9,7 +9,6 @@ import { PrismaClient } from "@prisma/client";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Verificación de variables de entorno
 if (!process.env.DATABASE_URL) {
     console.error("❌ Falta DATABASE_URL en .env");
     process.exit(1);
@@ -32,8 +31,6 @@ const prisma = new PrismaClient({ adapter });
 // ======================
 // NODEMAILER
 // ======================
-// ======================
-// NODEMAILER (con fix para certificado)
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -41,33 +38,25 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_APP_PASSWORD,
     },
     tls: {
-        rejectUnauthorized: false   // Solo para desarrollo - seguro para pruebas
+        rejectUnauthorized: false
     }
 });
 
 app.use(cors());
 app.use(express.json());
 
-// Ruta básica
+// Ruta de prueba
 app.get("/", (req, res) => {
-    res.json({ ok: true, message: "Servidor LEXIURIDICUS funcionando correctamente" });
+    res.json({ ok: true, message: "Servidor LEXIURIDICUS funcionando" });
 });
 
-// Prueba de correo
+// Prueba SMTP
 app.get("/api/mail-test", async (req, res) => {
     try {
         await transporter.verify();
-        res.json({
-            ok: true,
-            message: "✅ SMTP de Gmail listo para enviar correos"
-        });
+        res.json({ ok: true, message: "✅ SMTP listo" });
     } catch (error) {
-        console.error("Error SMTP:", error);
-        res.status(500).json({
-            ok: false,
-            message: "SMTP no funciona",
-            details: error.message
-        });
+        res.status(500).json({ ok: false, message: error.message });
     }
 });
 
@@ -75,12 +64,8 @@ app.get("/api/mail-test", async (req, res) => {
 app.post("/api/contact", async (req, res) => {
     try {
         const { nombre, email, telefono, servicio, mensaje } = req.body;
-
         if (!nombre || !email || !mensaje) {
-            return res.status(400).json({
-                ok: false,
-                error: "Nombre, email y mensaje son obligatorios"
-            });
+            return res.status(400).json({ ok: false, error: "Nombre, email y mensaje son obligatorios" });
         }
 
         const html = `
@@ -104,46 +89,91 @@ app.post("/api/contact", async (req, res) => {
 
         res.json({ ok: true, message: "Correo enviado correctamente" });
     } catch (error) {
-        console.error("Error enviando correo:", error);
-        res.status(500).json({
-            ok: false,
-            error: "Error al enviar el correo"
-        });
+        console.error("Error correo:", error);
+        res.status(500).json({ ok: false, error: "Error al enviar correo" });
     }
 });
 
-// Rutas del Blog (mínimas para no romper nada)
+// ======================
+// BLOG
+// ======================
 app.get("/api/blog", async (req, res) => {
-    try {
-        const posts = await prisma.post.findMany({
-            where: { published: true },
-            orderBy: { createdAt: "desc" },
-        });
-        res.json(posts);
-    } catch (error) {
-        console.error("Error posts:", error);
-        res.status(500).json({ ok: false, error: "Error al cargar posts" });
-    }
+    const posts = await prisma.post.findMany({
+        where: { published: true },
+        orderBy: { createdAt: "desc" },
+    });
+    res.json(posts);
 });
 
 app.get("/api/blog/:slug", async (req, res) => {
+    const post = await prisma.post.findUnique({
+        where: { slug: req.params.slug },
+        include: {
+            comments: {
+                where: { approved: true },
+                orderBy: { createdAt: "desc" }
+            }
+        }
+    });
+
+    if (!post) return res.status(404).json({ ok: false, error: "Artículo no encontrado" });
+
+    res.json(post);
+});
+
+// ======================
+// COMENTARIOS (CORREGIDO Y CON LOGS)
+// ======================
+app.post("/api/blog/:slug/comments", async (req, res) => {
     try {
+        const { slug } = req.params;
+        const { author, email, content } = req.body;
+
+        console.log(`[COMENTARIO] Recibido para slug: "${slug}"`);
+        console.log(`[COMENTARIO] Datos:`, { author, email, content });
+
+        if (!author || !email || !content) {
+            return res.status(400).json({ ok: false, error: "author, email y content son obligatorios" });
+        }
+
         const post = await prisma.post.findUnique({
-            where: { slug: req.params.slug },
-            include: { comments: { where: { approved: true } } }
+            where: { slug },
+            select: { id: true }
         });
 
-        if (!post) return res.status(404).json({ ok: false, error: "Artículo no encontrado" });
+        if (!post) {
+            console.log(`[COMENTARIO] ❌ Artículo NO encontrado con slug: ${slug}`);
+            return res.status(404).json({ ok: false, error: `Artículo no encontrado con slug: ${slug}` });
+        }
 
-        res.json(post);
+        console.log(`[COMENTARIO] ✅ Artículo encontrado (ID: ${post.id})`);
+
+        const comment = await prisma.comment.create({
+            data: {
+                postId: post.id,
+                author: author.trim(),
+                email: email.trim().toLowerCase(),
+                content: content.trim(),
+                approved: false
+            }
+        });
+
+        console.log(`[COMENTARIO] ✅ Comentario creado (ID: ${comment.id})`);
+
+        res.status(201).json({
+            ok: true,
+            message: "Comentario enviado correctamente. Será revisado."
+        });
+
     } catch (error) {
-        console.error("Error post:", error);
-        res.status(500).json({ ok: false, error: "Error al cargar artículo" });
+        console.error("[COMENTARIO] Error:", error);
+        res.status(500).json({ ok: false, error: "Error interno del servidor" });
     }
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
-    console.log(`✅ Servidor LEXIURIDICUS corriendo en http://localhost:${PORT}`);
+    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
 
 process.on("SIGINT", async () => {
