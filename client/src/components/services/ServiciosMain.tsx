@@ -1,94 +1,91 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-const ServiciosMain = () => {
+const ServiciosMain: React.FC = () => {
     const services = [
         {
-            id: 'tradicion-acciones',
-            title: 'Tradición de Acciones',
-            icon: '📋',
-            description: 'Cesión, transferencia y formalización legal de acciones societarias con total seguridad jurídica.',
-            path: '/servicios/tradicion-acciones',
-            accent: 'from-amber-500 to-yellow-600'
+            title: "Tradición de Acciones",
+            description: "Cesión, transferencia y formalización legal de acciones con total seguridad jurídica.",
+            icon: "📜",
+            link: "/servicios/tradicion-acciones",
+            color: "from-blue-600 to-blue-700"
         },
         {
-            id: 'gobierno-corporativo',
-            title: 'Gobierno Corporativo',
-            icon: '🏛️',
-            description: 'Estatutos sociales, juntas directivas, cumplimiento normativo y mejores prácticas de gobernanza.',
-            path: '/servicios/gobierno-corporativo',
-            accent: 'from-blue-600 to-[#0A2540]'
+            title: "Gobierno Corporativo",
+            description: "Estatutos sociales, juntas directivas, cumplimiento normativo y buena gobernanza.",
+            icon: "🏛️",
+            link: "/servicios/gobierno-corporativo",
+            color: "from-emerald-600 to-emerald-700"
         },
         {
-            id: 'asesoria-imagen-corporativa',
-            title: 'Asesoría en Imagen Corporativa',
-            icon: '✨',
-            description: 'Branding jurídico, protección de reputación y estrategias de comunicación estratégica.',
-            path: '/servicios/asesoria-imagen-corporativa',
-            accent: 'from-emerald-600 to-teal-700'
+            title: "Asesoría en Imagen Corporativa",
+            description: "Protección reputacional, branding jurídico y gestión estratégica de comunicación.",
+            icon: "🛡️",
+            link: "/servicios/asesoria-imagen-corporativa",
+            color: "from-amber-600 to-amber-700"
         }
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Hero Section */}
-            <div className="bg-[#0A2540] text-white py-28">
+        <>
+            <Helmet>
+                <title>Servicios | LEXIURIDICUS Abogados Corporativos Bogotá</title>
+                <meta
+                    name="description"
+                    content="Servicios especializados en Tradición de Acciones, Gobierno Corporativo y Asesoría en Imagen Corporativa. Soluciones legales estratégicas para empresas en Colombia."
+                />
+                <meta
+                    name="keywords"
+                    content="tradición de acciones, gobierno corporativo, imagen corporativa, abogados societarios, derecho empresarial colombia"
+                />
+                <meta property="og:title" content="Servicios - LEXIURIDICUS Abogados Corporativos" />
+                <meta property="og:description" content="Protección y crecimiento estratégico de tu empresa." />
+            </Helmet>
+
+            {/* Hero */}
+            <div className="bg-[#0A2540] text-white py-28" role="banner" aria-labelledby="servicios-hero-title">
                 <div className="max-w-5xl mx-auto px-6 text-center">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-6xl md:text-7xl font-serif font-bold tracking-tight mb-6"
-                    >
-                        Nuestros Servicios
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-2xl text-gray-300 max-w-3xl mx-auto"
-                    >
-                        Soluciones jurídicas especializadas con excelencia, experiencia y enfoque estratégico
-                    </motion.p>
+                    <h1 id="servicios-hero-title" className="text-6xl font-serif font-bold mb-6">Nuestros Servicios</h1>
+                    <p className="text-2xl text-gray-300 max-w-3xl mx-auto">
+                        Soluciones jurídicas especializadas que protegen y potencian el crecimiento de tu empresa
+                    </p>
                 </div>
             </div>
 
-            {/* Services Grid */}
-            <div className="max-w-6xl mx-auto px-6 py-20">
+            {/* Servicios Grid - Accesible */}
+            <div className="max-w-7xl mx-auto px-6 py-24">
                 <div className="grid md:grid-cols-3 gap-10">
                     {services.map((service, index) => (
                         <motion.div
-                            key={service.id}
-                            initial={{ opacity: 0, y: 60 }}
+                            key={index}
+                            initial={{ opacity: 0, y: 40 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            whileHover={{ y: -12 }}
-                            className="group bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 hover:border-[#0A2540]/30 h-full flex flex-col"
+                            className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all border border-gray-100 flex flex-col h-full"
+                            role="article"
                         >
-                            {/* Top Accent Bar */}
-                            <div className={`h-3 bg-gradient-to-r ${service.accent}`} />
+                            <div className={`h-3 bg-gradient-to-r ${service.color}`} aria-hidden="true" />
 
-                            {/* Icon */}
-                            <div className="pt-12 pb-8 flex justify-center text-7xl transition-transform group-hover:scale-110 duration-500">
-                                {service.icon}
-                            </div>
+                            <div className="p-10 flex flex-col flex-1">
+                                <div className="text-6xl mb-8" aria-hidden="true">{service.icon}</div>
 
-                            {/* Content */}
-                            <div className="px-10 pb-12 flex flex-col flex-1">
-                                <h3 className="text-3xl font-serif font-semibold text-[#0A2540] mb-6 text-center">
+                                <h2 className="text-3xl font-semibold text-[#0A2540] mb-5 group-hover:text-amber-600 transition-colors">
                                     {service.title}
-                                </h3>
+                                </h2>
 
-                                <p className="text-gray-600 text-[17px] leading-relaxed flex-1 text-center">
+                                <p className="text-gray-600 leading-relaxed mb-10 flex-1">
                                     {service.description}
                                 </p>
 
                                 <Link
-                                    to={service.path}
-                                    className="mt-10 inline-flex items-center justify-center gap-3 bg-[#0A2540] hover:bg-[#0A2540]/90 text-white font-medium py-4 px-10 rounded-2xl transition-all group-hover:gap-4"
+                                    to={service.link}
+                                    className="inline-flex items-center text-[#0A2540] font-medium group-hover:gap-3 transition-all mt-auto"
+                                    aria-label={`Conocer más sobre ${service.title}`}
                                 >
-                                    Ver detalle completo
-                                    <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+                                    Conocer más
+                                    <span className="text-xl transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
                                 </Link>
                             </div>
                         </motion.div>
@@ -97,23 +94,21 @@ const ServiciosMain = () => {
             </div>
 
             {/* CTA Final */}
-            <div className="bg-[#0A2540] py-20 text-white">
-                <div className="max-w-4xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl font-serif mb-6">¿Listo para fortalecer tu empresa?</h2>
-                    <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-                        Agenda una consulta inicial sin costo con nuestros especialistas.
-                        La primera reunión es completamente gratuita.
-                    </p>
+            <div className="bg-gray-50 py-20">
+                <div className="max-w-2xl mx-auto text-center px-6">
+                    <h2 className="text-4xl font-serif text-[#0A2540] mb-6">¿Necesitas asesoría especializada?</h2>
+                    <p className="text-lg text-gray-600 mb-10">Agenda una consulta estratégica sin costo con nuestro equipo.</p>
 
                     <Link
                         to="/contacto"
-                        className="inline-block bg-white text-[#0A2540] hover:bg-gray-100 font-semibold px-14 py-5 rounded-2xl text-lg transition-all"
+                        className="inline-block bg-[#0A2540] text-white px-12 py-5 rounded-2xl font-semibold text-lg hover:bg-[#0A2540]/90 transition-all"
+                        aria-label="Solicitar consulta gratuita"
                     >
-                        Agenda tu consulta ahora →
+                        Solicitar consulta gratuita
                     </Link>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

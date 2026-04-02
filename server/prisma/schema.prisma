@@ -7,17 +7,17 @@ datasource db {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   title     String
-  slug      String   @unique
+  slug      String    @unique
   excerpt   String?
   content   String?
   image     String?
   category  String?
   author    String?
-  published Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   comments  Comment[]
 
@@ -25,10 +25,15 @@ model Post {
 }
 
 model Comment {
-generator client {
-  provider = "prisma-client-js"
-}
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-datasource db {
-  provider = "postgresql"
+  author    String
+  email     String
+  content   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("comments")
 }

@@ -1,14 +1,17 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { Pool } from "pg";
 import nodemailer from "nodemailer";
+import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ======================
+// VALIDACIÓN DE ENTORNO
+// ======================
 if (!process.env.DATABASE_URL) {
     console.error("❌ Falta DATABASE_URL en .env");
     process.exit(1);
@@ -42,15 +45,20 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// ======================
+// MIDDLEWARE
+// ======================
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Ruta de prueba
+// ======================
+// RUTAS
+// ======================
 app.get("/", (req, res) => {
-    res.json({ ok: true, message: "Servidor LEXIURIDICUS funcionando" });
+    res.json({ ok: true, message: "🚀 Servidor LEXIURIDICUS funcionando" });
 });
 
-// Prueba SMTP
 app.get("/api/mail-test", async (req, res) => {
     try {
         await transporter.verify();
@@ -60,7 +68,6 @@ app.get("/api/mail-test", async (req, res) => {
     }
 });
 
-// Formulario de contacto
 app.post("/api/contact", async (req, res) => {
     try {
         const { nombre, email, telefono, servicio, mensaje } = req.body;
@@ -87,16 +94,15 @@ app.post("/api/contact", async (req, res) => {
             html,
         });
 
-        res.json({ ok: true, message: "Correo enviado correctamente" });
+        console.log(`✅ Correo enviado de ${email}`);
+        res.json({ ok: true, message: "Mensaje enviado correctamente" });
     } catch (error) {
-        console.error("Error correo:", error);
+        console.error("❌ Error correo:", error);
         res.status(500).json({ ok: false, error: "Error al enviar correo" });
     }
 });
 
-// ======================
 // BLOG
-// ======================
 app.get("/api/blog", async (req, res) => {
     const posts = await prisma.post.findMany({
         where: { published: true },
@@ -121,19 +127,16 @@ app.get("/api/blog/:slug", async (req, res) => {
     res.json(post);
 });
 
-// ======================
-// COMENTARIOS (CORREGIDO Y CON LOGS)
-// ======================
+// COMENTARIOS
 app.post("/api/blog/:slug/comments", async (req, res) => {
     try {
         const { slug } = req.params;
         const { author, email, content } = req.body;
 
-        console.log(`[COMENTARIO] Recibido para slug: "${slug}"`);
-        console.log(`[COMENTARIO] Datos:`, { author, email, content });
+        console.log("🔵 [COMENTARIO] Recibido - Slug:", slug);
 
         if (!author || !email || !content) {
-            return res.status(400).json({ ok: false, error: "author, email y content son obligatorios" });
+            return res.status(400).json({ ok: false, error: "Faltan datos" });
         }
 
         const post = await prisma.post.findUnique({
@@ -142,11 +145,9 @@ app.post("/api/blog/:slug/comments", async (req, res) => {
         });
 
         if (!post) {
-            console.log(`[COMENTARIO] ❌ Artículo NO encontrado con slug: ${slug}`);
-            return res.status(404).json({ ok: false, error: `Artículo no encontrado con slug: ${slug}` });
+            console.log("❌ Post no encontrado:", slug);
+            return res.status(404).json({ ok: false, error: "Artículo no encontrado" });
         }
-
-        console.log(`[COMENTARIO] ✅ Artículo encontrado (ID: ${post.id})`);
 
         const comment = await prisma.comment.create({
             data: {
@@ -158,7 +159,7 @@ app.post("/api/blog/:slug/comments", async (req, res) => {
             }
         });
 
-        console.log(`[COMENTARIO] ✅ Comentario creado (ID: ${comment.id})`);
+        console.log(`✅ Comentario guardado - ID: ${comment.id}`);
 
         res.status(201).json({
             ok: true,
@@ -166,12 +167,14 @@ app.post("/api/blog/:slug/comments", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("[COMENTARIO] Error:", error);
-        res.status(500).json({ ok: false, error: "Error interno del servidor" });
+        console.error("❌ Error guardando comentario:", error.message);
+        res.status(500).json({ ok: false, error: "Error interno" });
     }
 });
 
-// Iniciar servidor
+// ======================
+// INICIO DEL SERVIDOR
+// ======================
 app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
@@ -179,4 +182,5 @@ app.listen(PORT, () => {
 process.on("SIGINT", async () => {
     await prisma.$disconnect();
     await pool.end();
+    console.log("🛑 Servidor cerrado");
 });
