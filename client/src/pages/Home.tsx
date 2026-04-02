@@ -1,69 +1,153 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import Hero from '../components/Hero';
 
-const Hero = () => {
+const Home = () => {
     return (
-        <div className="relative h-screen flex items-center justify-center overflow-hidden bg-[#0A2540]">
-            {/* Fondo sutil */}
-            <div className="absolute inset-0 bg-[radial-gradient(at_center,#ffffff15_0%,transparent_60%)]" />
+        <div>
+            <Hero />
 
-            <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.9 }}
-                >
-                    <h1 className="text-7xl md:text-[5.5rem] font-serif font-bold tracking-tighter leading-none mb-6">
-                        LEXIURIDICUS
-                    </h1>
-                    <p className="text-3xl md:text-4xl font-light text-gray-200 mb-3">
-                        Abogados Corporativos
-                    </p>
-                    <div className="h-1 w-28 bg-amber-400 mx-auto mb-10" />
-                </motion.div>
+            {/* Servicios */}
+            <div className="py-24 bg-gray-50">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-5xl font-serif text-[#0A2540] mb-4">Nuestros Servicios</h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Soluciones jurídicas especializadas que protegen y fortalecen tu empresa
+                        </p>
+                    </div>
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-300 mb-12 leading-relaxed"
-                >
-                    Especialistas en <span className="text-amber-400 font-medium">Tradición de Acciones</span>,
-                    <span className="text-amber-400 font-medium"> Gobierno Corporativo</span> y
-                    <span className="text-amber-400 font-medium"> Asesoría en Imagen Corporativa</span>.<br />
-                    Protegemos y hacemos crecer tu empresa con soluciones jurídicas de excelencia.
-                </motion.p>
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {[
+                            { title: "Tradición de Acciones", desc: "Cesión y formalización legal segura", icon: "📜", path: "/servicios/tradicion-acciones" },
+                            { title: "Gobierno Corporativo", desc: "Estatutos y gobernanza empresarial", icon: "🏛️", path: "/servicios/gobierno-corporativo" },
+                            { title: "Imagen Corporativa", desc: "Branding jurídico y protección reputacional", icon: "✨", path: "/servicios/asesoria-imagen-corporativa" }
+                        ].map((service, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="group bg-white rounded-3xl shadow-xl p-10 hover:shadow-2xl transition-all"
+                            >
+                                <div className="text-6xl mb-8">{service.icon}</div>
+                                <h3 className="text-3xl font-serif text-[#0A2540] mb-5">{service.title}</h3>
+                                <p className="text-gray-600 mb-10">{service.desc}</p>
+                                <Link to={service.path} className="text-[#0A2540] font-medium group-hover:underline flex items-center gap-2">
+                                    Ver detalle <span>→</span>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </div>
 
-                <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-                    <Link
-                        to="/servicios"
-                        className="bg-white text-[#0A2540] hover:bg-amber-400 hover:text-[#0A2540] font-semibold px-12 py-5 rounded-2xl text-lg transition-all duration-300"
-                    >
-                        Ver nuestros servicios
-                    </Link>
-
-                    <Link
-                        to="/contacto"
-                        className="border-2 border-white/80 hover:border-white hover:bg-white hover:text-[#0A2540] font-semibold px-12 py-5 rounded-2xl text-lg transition-all duration-300"
-                    >
-                        Agenda consulta gratuita
-                    </Link>
+                    <div className="text-center mt-12">
+                        <Link to="/servicios" className="inline-block bg-[#0A2540] text-white px-10 py-4 rounded-2xl font-semibold hover:bg-[#0A2540]/90">
+                            Ver todos los servicios →
+                        </Link>
+                    </div>
                 </div>
             </div>
 
-            {/* Indicador de scroll */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 2.5, repeat: Infinity }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white text-xs tracking-[3px] flex flex-col items-center"
-            >
-                DESPLAZA
-                <span className="text-2xl mt-1">↓</span>
-            </motion.div>
+            {/* Estadísticas Clave */}
+            <div className="py-20 bg-white border-t border-b border-gray-100">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="grid md:grid-cols-4 gap-12 text-center">
+                        {[
+                            { number: "12+", label: "Años de experiencia" },
+                            { number: "180+", label: "Operaciones societarias" },
+                            { number: "95%", label: "Tasa de satisfacción" },
+                            { number: "45", label: "Empresas asesoradas" }
+                        ].map((stat, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                            >
+                                <div className="text-6xl md:text-7xl font-serif font-bold text-[#0A2540] mb-2">{stat.number}</div>
+                                <p className="text-gray-600 font-medium">{stat.label}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Testimonios */}
+            <div className="py-24 bg-gray-50">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-5xl font-serif text-[#0A2540] mb-4">Lo que dicen nuestros clientes</h2>
+                        <p className="text-xl text-gray-600">Confianza construida con resultados reales</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {[
+                            { name: "Dr. Carlos Mendoza", position: "Gerente General - Grupo Andes", text: "El proceso de cesión de acciones fue impecable y con total seguridad jurídica.", company: "Grupo Andes" },
+                            { name: "María Fernanda López", position: "Directora Jurídica - Constructora Horizonte", text: "Actualizamos nuestros estatutos evitando riesgos importantes. Altamente recomendados.", company: "Constructora Horizonte" },
+                            { name: "Roberto Vargas", position: "CEO - PharmaTech Colombia", text: "Su apoyo en protección de imagen corporativa fue clave en una situación delicada.", company: "PharmaTech" }
+                        ].map((t, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="bg-white rounded-3xl p-10 shadow-sm"
+                            >
+                                <div className="text-4xl mb-6 text-amber-500">“</div>
+                                <p className="text-gray-700 italic mb-8">{t.text}</p>
+                                <p className="font-semibold text-[#0A2540]">{t.name}</p>
+                                <p className="text-sm text-gray-500">{t.position}</p>
+                                <p className="text-xs text-amber-600 mt-1">{t.company}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* NUEVA SECCIÓN: ¿Por qué elegir LEXIURIDICUS? */}
+            <div className="py-24 bg-white">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-5xl font-serif text-[#0A2540] mb-4">¿Por qué elegir LEXIURIDICUS?</h2>
+                        <p className="text-xl text-gray-600 max-w-xl mx-auto">Experiencia, rigor y enfoque estratégico que marcan la diferencia</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-10">
+                        {[
+                            {
+                                icon: "🛡️",
+                                title: "Seguridad Jurídica Total",
+                                desc: "Procesos blindados que evitan riesgos futuros y protegen el patrimonio de nuestros clientes."
+                            },
+                            {
+                                icon: "🎯",
+                                title: "Enfoque Estratégico",
+                                desc: "No solo resolvemos problemas legales, sino que alineamos el derecho con los objetivos de negocio de tu empresa."
+                            },
+                            {
+                                icon: "🤝",
+                                title: "Relación de Confianza",
+                                desc: "Asesoría cercana, transparente y con respuesta rápida. Somos un socio estratégico, no solo un proveedor."
+                            }
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 40 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className="text-center bg-gray-50 rounded-3xl p-12 hover:bg-white hover:shadow-xl transition-all"
+                            >
+                                <div className="text-6xl mb-8">{item.icon}</div>
+                                <h3 className="text-2xl font-semibold text-[#0A2540] mb-5">{item.title}</h3>
+                                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default Hero;
+export default Home;

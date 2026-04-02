@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -7,6 +7,8 @@ import Nosotros from './pages/Nosotros';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Contacto from './pages/Contacto';
+import PoliticasPrivacidad from './pages/PoliticasPrivacidad';
+import AvisoLegal from './pages/AvisoLegal';
 
 // Subpáginas de Servicios
 import ServiciosMain from './components/services/ServiciosMain';
@@ -14,17 +16,32 @@ import TradicionAcciones from './components/services/TradicionAcciones';
 import GobiernoCorporativo from './components/services/GobiernoCorporativo';
 import AsesoriaImagen from './components/services/AsesoriaImagen';
 
-import Footer from './components/Footer';   // ← Importante: Footer importado
+import Footer from './components/Footer';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, [pathname]);
+
+  return null;
+};
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-white flex flex-col">   {/* ← flex flex-col es clave */}
+      <div className="min-h-screen bg-white flex flex-col">
 
         <Navbar />
 
-        {/* Contenido principal que crece */}
-        <main className="flex-1">
+        <ScrollToTop />
+
+        <main className="flex-1 pt-20">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/nosotros" element={<Nosotros />} />
@@ -41,6 +58,10 @@ const App: React.FC = () => {
 
             {/* Contacto */}
             <Route path="/contacto" element={<Contacto />} />
+
+            {/* Páginas Legales */}
+            <Route path="/politicas-privacidad" element={<PoliticasPrivacidad />} />
+            <Route path="/aviso-legal" element={<AvisoLegal />} />
 
             {/* 404 */}
             <Route path="*" element={
@@ -60,9 +81,7 @@ const App: React.FC = () => {
           </Routes>
         </main>
 
-        {/* Footer - Aparece en TODAS las páginas */}
         <Footer />
-
       </div>
     </Router>
   );
