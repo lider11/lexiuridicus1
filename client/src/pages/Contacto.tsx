@@ -30,20 +30,24 @@ const Contacto: React.FC = () => {
             let response: Response | null = null;
 
             for (const path of CONTACT_API_PATHS) {
-                const candidate = await fetch(buildApiUrl(path), {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData),
-                });
+                try {
+                    const candidate = await fetch(buildApiUrl(path), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData),
+                    });
 
-                if (candidate.ok) {
-                    response = candidate;
-                    break;
-                }
+                    if (candidate.ok) {
+                        response = candidate;
+                        break;
+                    }
 
-                if (candidate.status !== 404 && candidate.status !== 405) {
-                    response = candidate;
-                    break;
+                    if (candidate.status !== 404 && candidate.status !== 405) {
+                        response = candidate;
+                        break;
+                    }
+                } catch {
+                    // Posible bloqueo CORS o error de red; intentamos el fallback no-cors más abajo.
                 }
             }
 
@@ -65,7 +69,7 @@ const Contacto: React.FC = () => {
 
                 setSubmitMessage({
                     type: 'success',
-                    text: '✅ Mensaje enviado correctamente. Nos pondremos en contacto pronto.'
+                    text: '✅ Mensaje enviado. Si no recibes respuesta pronto, por favor contáctanos por WhatsApp para confirmar.'
                 });
                 setFormData({ nombre: '', email: '', telefono: '', servicio: '', mensaje: '' });
                 return;

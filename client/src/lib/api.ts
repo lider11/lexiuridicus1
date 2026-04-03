@@ -25,4 +25,4 @@ export const buildApiUrl = (path: string) => {
   return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 };
 
-export const CONTACT_API_PATHS = ['/api/contact', '/api/contacto'] as const;
+export const CONTACT_API_PATHS = ['/api/contact'] as const;
