@@ -1,4 +1,6 @@
 const Contacto = () => {
+    const apiBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+
     return (
         <div className="min-h-screen bg-gray-50 py-20 px-6">
             <div className="max-w-2xl mx-auto">
@@ -131,7 +133,7 @@ const Contacto = () => {
                 };
 
                 try {
-                  const response = await fetch('http://localhost:5000/api/contacto', {
+                  const response = await fetch('${apiBaseUrl}/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
