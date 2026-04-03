@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { buildApiUrl } from '../lib/api';
 
 interface Post {
     id: number;
@@ -43,7 +44,7 @@ const BlogPost: React.FC = () => {
     useEffect(() => {
         if (!slug) return;
 
-        axios.get(`http://localhost:5000/api/blog/${slug}`)
+        axios.get(buildApiUrl(`/api/blog/${slug}`))
             .then(res => setPost(res.data))
             .catch(() => setError("No se pudo cargar el artículo."))
             .finally(() => setLoading(false));
@@ -62,14 +63,14 @@ const BlogPost: React.FC = () => {
         setSubmitMessage(null);
 
         try {
-            await axios.post(`http://localhost:5000/api/blog/${slug}/comments`, formData);
+            await axios.post(buildApiUrl(`/api/blog/${slug}/comments`), formData);
 
             setSubmitMessage({
                 type: 'success',
                 text: '✅ Comentario enviado correctamente. Será revisado antes de publicarse.'
             });
 
-            const refreshed = await axios.get(`http://localhost:5000/api/blog/${slug}`);
+            const refreshed = await axios.get(buildApiUrl(`/api/blog/${slug}`));
             setPost(refreshed.data);
 
             setFormData({ author: '', email: '', content: '' });
