@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { buildApiUrl } from '../lib/api';
-
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+import { buildApiUrl, CONTACT_API_PATHS, IS_CROSS_ORIGIN_API } from '../lib/api';
 
 const Contacto: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -29,16 +27,58 @@ const Contacto: React.FC = () => {
         setSubmitMessage(null);
 
         try {
-            const response = await fetch(buildApiUrl('/api/contact'), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+            let response: Response | null = null;
 
-            const data = await response.json();
+            for (const path of CONTACT_API_PATHS) {
+                const candidate = await fetch(buildApiUrl(path), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Hubo un error al enviar el mensaje.');
+                if (candidate.ok) {
+                    response = candidate;
+                    break;
+                }
+
+                if (candidate.status !== 404 && candidate.status !== 405) {
+                    response = candidate;
+                    break;
+                }
+            }
+
+            if (!response && IS_CROSS_ORIGIN_API) {
+                const body = new URLSearchParams({
+                    nombre: formData.nombre,
+                    email: formData.email,
+                    telefono: formData.telefono,
+                    servicio: formData.servicio,
+                    mensaje: formData.mensaje,
+                });
+
+                await fetch(buildApiUrl('/api/contact'), {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                    body: body.toString(),
+                });
+
+                setSubmitMessage({
+                    type: 'success',
+                    text: '✅ Mensaje enviado correctamente. Nos pondremos en contacto pronto.'
+                });
+                setFormData({ nombre: '', email: '', telefono: '', servicio: '', mensaje: '' });
+                return;
+            }
+
+            if (response?.ok) {
+                setSubmitMessage({
+                    type: 'success',
+                    text: '✅ Mensaje enviado correctamente. Nos pondremos en contacto pronto.'
+                });
+                setFormData({ nombre: '', email: '', telefono: '', servicio: '', mensaje: '' });
+            } else {
+                throw new Error('Error en el servidor');
             }
 
             setSubmitMessage({

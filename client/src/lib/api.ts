@@ -2,7 +2,6 @@ const normalizeUrl = (value: string) => value.trim().replace(/\/$/, '');
 
 const rawApiBaseUrl = normalizeUrl(import.meta.env.VITE_API_URL || '');
 const runtimeOrigin = typeof window !== 'undefined' ? normalizeUrl(window.location.origin) : '';
-const allowCrossOriginApi = (import.meta.env.VITE_ALLOW_CROSS_ORIGIN_API || '').toLowerCase() === 'true';
 
 const getOrigin = (url: string) => {
   try {
@@ -12,15 +11,11 @@ const getOrigin = (url: string) => {
   }
 };
 
-const hasCrossOriginConfig =
+export const API_BASE_URL = rawApiBaseUrl || runtimeOrigin;
+export const IS_CROSS_ORIGIN_API =
   Boolean(rawApiBaseUrl) &&
   Boolean(runtimeOrigin) &&
   getOrigin(rawApiBaseUrl) !== getOrigin(runtimeOrigin);
-
-export const API_BASE_URL =
-  hasCrossOriginConfig && !allowCrossOriginApi
-    ? runtimeOrigin
-    : (rawApiBaseUrl || runtimeOrigin);
 
 export const buildApiUrl = (path: string) => {
   if (!path.startsWith('/')) {
@@ -29,3 +24,5 @@ export const buildApiUrl = (path: string) => {
 
   return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 };
+
+export const CONTACT_API_PATHS = ['/api/contact', '/api/contacto'] as const;
