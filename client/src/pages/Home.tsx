@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Servicios */}
-            <section className="py-24 bg-white" aria-labelledby="servicios-title">
+            <section className="py-24 bg-gradient-to-b from-white to-slate-50" aria-labelledby="servicios-title">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 id="servicios-title" className="text-5xl font-serif text-[#0A2540] mb-4">Nuestros Servicios</h2>
