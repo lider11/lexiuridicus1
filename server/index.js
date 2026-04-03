@@ -7,16 +7,34 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS configuration for Hostinger
-app.use(cors({
-    origin: true,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type']
-}));
+// CORS avanzado
+const allowedOrigins = [
+    "https://limegreen-mantis-572477.hostingersite.com",
+    "https://steelblue-echidna-352094.hostingersite.com",
+    "http://localhost:5173",
+    "http://localhost:4173",
+    "http://127.0.0.1:5173"
+];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        console.log(`❌ CORS bloqueado: ${origin}`);
+        return callback(new Error('Not allowed by CORS'));
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// MySQL Connection Pool
+// Pool MySQL
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT) || 3306,
@@ -28,33 +46,24 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Test route
+// Rutas
 app.get('/', (req, res) => {
-    res.json({
-        ok: true,
-        message: '🚀 Backend LEXIURIDICUS funcionando correctamente en Hostinger'
-    });
+    res.json({ ok: true, message: 'Backend funcionando' });
 });
 
-// Contact form route
 app.post('/api/contacto', async (req, res) => {
     try {
         const { nombre, email, telefono, servicio, mensaje } = req.body;
 
         if (!nombre || !email || !mensaje) {
-            return res.status(400).json({
-                ok: false,
-                message: 'Nombre, email y mensaje son obligatorios'
-            });
+            return res.status(400).json({ ok: false, message: 'Nombre, email y mensaje son obligatorios' });
         }
 
-        // Save to database
         await pool.query(
             'INSERT INTO contactos (nombre, email, telefono, servicio, mensaje) VALUES (?, ?, ?, ?, ?)',
             [nombre, email, telefono || null, servicio || 'General', mensaje]
         );
 
-        // Send email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -77,23 +86,18 @@ app.post('/api/contacto', async (req, res) => {
         <hr>
         <p><strong>Mensaje:</strong></p>
         <p>${mensaje}</p>
-        <br>
-        <small>Enviado: ${new Date().toLocaleString('es-CO')}</small>
       `
         });
 
-        console.log(`✅ Mensaje recibido y enviado de: ${nombre} (${email})`);
+        console.log(`✅ Mensaje guardado de: ${nombre}`);
         res.json({ ok: true, message: 'Mensaje enviado correctamente' });
 
     } catch (error) {
-        console.error('Error en /api/contacto:', error);
-        res.status(500).json({
-            ok: false,
-            message: 'Error al procesar el mensaje. Inténtalo más tarde.'
-        });
+        console.error('Error:', error);
+        res.status(500).json({ ok: false, message: 'Error al procesar el mensaje' });
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor LEXIURIDICUS corriendo en puerto ${PORT}`);
+    console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
 });

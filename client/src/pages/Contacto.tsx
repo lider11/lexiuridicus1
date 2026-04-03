@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
 const Contacto: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -28,7 +28,7 @@ const Contacto: React.FC = () => {
         setSubmitMessage(null);
 
         try {
-            const response = await fetch(`${API_URL}/api/contacto`, {
+            const response = await fetch(`${API_BASE_URL}/api/contact`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
