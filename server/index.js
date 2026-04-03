@@ -7,14 +7,16 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS configuration for Hostinger
 app.use(cors({
     origin: true,
-    methods: ["GET", "POST"],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json());
 
-// Crear pool de conexión
+// MySQL Connection Pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT) || 3306,
@@ -26,27 +28,33 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Ruta de prueba
+// Test route
 app.get('/', (req, res) => {
-    res.json({ ok: true, message: 'Backend funcionando' });
+    res.json({
+        ok: true,
+        message: '🚀 Backend LEXIURIDICUS funcionando correctamente en Hostinger'
+    });
 });
 
-// Ruta del formulario
+// Contact form route
 app.post('/api/contacto', async (req, res) => {
     try {
         const { nombre, email, telefono, servicio, mensaje } = req.body;
 
         if (!nombre || !email || !mensaje) {
-            return res.status(400).json({ ok: false, message: 'Nombre, email y mensaje son obligatorios' });
+            return res.status(400).json({
+                ok: false,
+                message: 'Nombre, email y mensaje son obligatorios'
+            });
         }
 
-        // Guardar en MySQL
+        // Save to database
         await pool.query(
             'INSERT INTO contactos (nombre, email, telefono, servicio, mensaje) VALUES (?, ?, ?, ?, ?)',
             [nombre, email, telefono || null, servicio || 'General', mensaje]
         );
 
-        // Enviar email
+        // Send email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -69,15 +77,20 @@ app.post('/api/contacto', async (req, res) => {
         <hr>
         <p><strong>Mensaje:</strong></p>
         <p>${mensaje}</p>
+        <br>
+        <small>Enviado: ${new Date().toLocaleString('es-CO')}</small>
       `
         });
 
-        console.log(`✅ Mensaje guardado de: ${nombre} (${email})`);
+        console.log(`✅ Mensaje recibido y enviado de: ${nombre} (${email})`);
         res.json({ ok: true, message: 'Mensaje enviado correctamente' });
 
     } catch (error) {
-        console.error('Error en contacto:', error);
-        res.status(500).json({ ok: false, message: 'Error al procesar el mensaje' });
+        console.error('Error en /api/contacto:', error);
+        res.status(500).json({
+            ok: false,
+            message: 'Error al procesar el mensaje. Inténtalo más tarde.'
+        });
     }
 });
 
