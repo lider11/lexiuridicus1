@@ -133,7 +133,7 @@ const Contacto = () => {
                 };
 
                 try {
-                  const response = await fetch('${apiBaseUrl}/api/contacto', {
+                  const response = await fetch('${apiBaseUrl}/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
