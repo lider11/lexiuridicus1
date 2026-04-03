@@ -75,7 +75,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Servicios */}
-            <section className="py-24 bg-white" aria-labelledby="servicios-title">
+            <section className="py-24 bg-gradient-to-b from-white to-[#F7FAFF]" aria-labelledby="servicios-title">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 id="servicios-title" className="text-5xl font-serif text-[#0A2540] mb-4">Nuestros Servicios</h2>
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                                 key={index}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                className="group bg-white border border-gray-100 rounded-3xl p-10 hover:shadow-2xl transition-all"
+                                className="group bg-white border border-[#E8EDF5] rounded-3xl p-10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                             >
                                 <div className="text-6xl mb-8">{service.icon}</div>
                                 <h3 className="text-3xl font-semibold text-[#0A2540] mb-5">{service.title}</h3>
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Estadísticas */}
-            <section className="py-20 bg-gray-50" aria-labelledby="estadisticas-title">
+            <section className="py-20 bg-[#EEF3FA]" aria-labelledby="estadisticas-title">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
                         {stats.map((stat, index) => (
