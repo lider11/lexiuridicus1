@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+
 interface Post {
   id: number;
   title: string;
@@ -22,7 +24,7 @@ const Blog = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/blog');
+        const response = await axios.get(`${API_BASE_URL}/api/blog`);
         setPosts(response.data);
       } catch (err) {
         console.error('Error al cargar posts:', err);
