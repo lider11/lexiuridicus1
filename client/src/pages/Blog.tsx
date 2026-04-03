@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { buildApiUrl } from '../lib/api';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
 
@@ -24,7 +25,7 @@ const Blog = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/blog`);
+        const response = await axios.get(buildApiUrl('/api/blog'));
         setPosts(response.data);
       } catch (err) {
         console.error('Error al cargar posts:', err);
