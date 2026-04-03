@@ -9,10 +9,13 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #f5f7fb;
+    background-color: #f8fafc;
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image:
+      radial-gradient(circle at 10% -10%, rgba(15, 37, 64, 0.08), transparent 38%),
+      radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.08), transparent 30%);
   }
   
   h1, h2, h3, h4, h5, h6 {
