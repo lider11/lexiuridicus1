@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                                 key={index}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                className="group bg-white/95 border border-slate-100 rounded-3xl p-10 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                                className="group bg-white border border-gray-200 rounded-3xl p-10 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                             >
                                 <div className="text-6xl mb-8">{service.icon}</div>
                                 <h3 className="text-3xl font-semibold text-[#0A2540] mb-5">{service.title}</h3>
@@ -107,7 +107,7 @@ const Home: React.FC = () => {
             </section>
 
             {/* Estadísticas */}
-            <section className="py-20 bg-gray-50" aria-labelledby="estadisticas-title">
+            <section className="py-20 bg-[#F3F6FA]" aria-labelledby="estadisticas-title">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
                         {stats.map((stat, index) => (
