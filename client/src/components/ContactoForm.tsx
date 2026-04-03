@@ -1,4 +1,8 @@
+import { buildApiUrl } from '../lib/api';
+
 const Contacto = () => {
+    const contactEndpoint = buildApiUrl('/api/contact');
+
     return (
         <div className="min-h-screen bg-gray-50 py-20 px-6">
             <div className="max-w-2xl mx-auto">
@@ -131,7 +135,7 @@ const Contacto = () => {
                 };
 
                 try {
-                  const response = await fetch('http://localhost:5000/api/contacto', {
+                  const response = await fetch('${contactEndpoint}', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
