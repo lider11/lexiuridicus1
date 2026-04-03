@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { buildApiUrl } from '../lib/api';
 
 const Contacto: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ const Contacto: React.FC = () => {
         setSubmitMessage(null);
 
         try {
-            const response = await fetch('http://localhost:5000/api/contact', {
+            const response = await fetch(buildApiUrl('/api/contact'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
