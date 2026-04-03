@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { buildApiUrl, CONTACT_API_PATHS, IS_CROSS_ORIGIN_API } from '../lib/api';
 
 const Contacto: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -25,13 +26,55 @@ const Contacto: React.FC = () => {
         setSubmitMessage(null);
 
         try {
-            const response = await fetch('http://localhost:5000/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+            let response: Response | null = null;
 
-            if (response.ok) {
+            for (const path of CONTACT_API_PATHS) {
+                try {
+                    const candidate = await fetch(buildApiUrl(path), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData),
+                    });
+
+                    if (candidate.ok) {
+                        response = candidate;
+                        break;
+                    }
+
+                    if (candidate.status !== 404 && candidate.status !== 405) {
+                        response = candidate;
+                        break;
+                    }
+                } catch {
+                    // Posible bloqueo CORS o error de red; intentamos el fallback no-cors más abajo.
+                }
+            }
+
+            if (!response && IS_CROSS_ORIGIN_API) {
+                const body = new URLSearchParams({
+                    nombre: formData.nombre,
+                    email: formData.email,
+                    telefono: formData.telefono,
+                    servicio: formData.servicio,
+                    mensaje: formData.mensaje,
+                });
+
+                await fetch(buildApiUrl('/api/contact'), {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                    body: body.toString(),
+                });
+
+                setSubmitMessage({
+                    type: 'success',
+                    text: '✅ Mensaje enviado. Si no recibes respuesta pronto, por favor contáctanos por WhatsApp para confirmar.'
+                });
+                setFormData({ nombre: '', email: '', telefono: '', servicio: '', mensaje: '' });
+                return;
+            }
+
+            if (response?.ok) {
                 setSubmitMessage({
                     type: 'success',
                     text: '✅ Mensaje enviado correctamente. Nos pondremos en contacto pronto.'
