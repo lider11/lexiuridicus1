@@ -18,11 +18,9 @@ export const IS_CROSS_ORIGIN_API =
   getOrigin(rawApiBaseUrl) !== getOrigin(runtimeOrigin);
 
 export const buildApiUrl = (path: string) => {
-  if (!path.startsWith('/')) {
-    throw new Error(`API path must start with "/": ${path}`);
-  }
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-  return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+  return API_BASE_URL ? `${API_BASE_URL}${normalizedPath}` : normalizedPath;
 };
 
 export const CONTACT_API_PATHS = ['/api/contact'] as const;
