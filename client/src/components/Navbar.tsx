@@ -23,7 +23,7 @@ const Navbar = () => {
     return (
         <motion.nav
             style={{ y: navbarY }}
-            className="bg-white border-b border-gray-100 fixed w-full z-50"
+            className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-[0_6px_20px_rgba(15,23,42,0.06)] fixed w-full z-50"
         >
             <div className="max-w-6xl mx-auto px-6">
                 <div className="flex justify-between items-center h-20">

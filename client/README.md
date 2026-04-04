@@ -71,3 +71,25 @@ export default defineConfig([
   },
 ])
 ```
+
+---
+
+## Checklist de despliegue (Hostinger)
+
+1. Compilar producción:
+
+```bash
+cd client
+npm ci
+npm run build
+```
+
+2. Subir **todo** el contenido de `client/dist/` (incluye `index.html` y `assets/`).
+3. Reemplazar archivos anteriores (no mezclar `assets` viejos con nuevos).
+4. Limpiar caché del navegador (hard refresh) y probar en incógnito.
+5. Verificar en DevTools > Network:
+   - `index.html` → 200
+   - `assets/*.js` → 200
+   - `assets/*.css` → 200
+6. Confirmar `VITE_API_URL` antes de compilar.
+7. Validar rutas SPA (`/`, `/servicios`, `/blog/...`, `/contacto`) después del despliegue.
